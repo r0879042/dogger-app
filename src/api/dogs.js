@@ -23,3 +23,46 @@ export async function fetchBreeds() {
   
     return data.message
   }
+  
+  export async function fetchBreedsWithImages() {
+    const breeds = await fetchBreeds()
+  
+    const cuteBreeds = [
+        'pomeranian',
+        'samoyed',
+        'maltese',
+        'chow',
+        'husky',
+        'shiba',
+        'corgi',
+        'papillon',
+        'poodle',
+        'eskimo',
+        'pekinese',
+        'akita',
+      ]
+      
+      const limitedBreeds = breeds.filter((breed) =>
+        cuteBreeds.includes(breed)
+      )
+  
+    const breedsWithImages = await Promise.all(
+      limitedBreeds.map(async (breed) => {
+        try {
+          const image = await fetchBreedImage(breed)
+  
+          return {
+            breed,
+            image,
+          }
+        } catch {
+          return {
+            breed,
+            image: null,
+          }
+        }
+      })
+    )
+  
+    return breedsWithImages
+  }

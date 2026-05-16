@@ -10,15 +10,15 @@ import {
   NAlert,
 } from 'naive-ui'
 
-import { fetchBreeds } from '../api/dogs'
+import { fetchBreedsWithImages } from '../api/dogs'
 
 const {
   data: breeds,
   isLoading,
   error,
 } = useQuery({
-  queryKey: ['breeds'],
-  queryFn: fetchBreeds,
+  queryKey: ['breeds-with-images'],
+  queryFn: fetchBreedsWithImages,
 })
 </script>
 
@@ -28,7 +28,7 @@ const {
       <h1 class="title">Dogger App</h1>
 
       <p class="subtitle">
-        Explore dog breeds from the Dog API
+        Explore beautiful dog breeds
       </p>
 
       <div v-if="isLoading" class="state">
@@ -51,13 +51,21 @@ const {
         y-gap="20"
       >
         <NGridItem
-          v-for="breed in breeds"
-          :key="breed"
+          v-for="item in breeds"
+          :key="item.breed"
         >
-          <RouterLink :to="`/breed/${breed}`">
+          <RouterLink :to="`/breed/${item.breed}`">
             <NCard hoverable class="breed-card">
+              <div class="image-wrapper">
+                <img
+                  v-if="item.image"
+                  :src="item.image"
+                  :alt="item.breed"
+                />
+              </div>
+
               <h3 class="breed-name">
-                {{ breed }}
+                {{ item.breed }}
               </h3>
             </NCard>
           </RouterLink>
@@ -85,19 +93,40 @@ const {
 }
 
 .breed-card {
-  border-radius: 20px;
+  border-radius: 22px;
+  overflow: hidden;
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .breed-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+}
+
+.image-wrapper {
+  height: 220px;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition:
+    transform 0.4s ease,
+    opacity 0.4s ease;
+}
+
+.breed-card:hover img {
+  transform: scale(1.05);
 }
 
 .breed-name {
   text-transform: capitalize;
   text-align: center;
   font-size: 1.1rem;
+  margin-top: 16px;
 }
 </style>
