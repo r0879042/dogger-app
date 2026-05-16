@@ -66,6 +66,5 @@ src/
 ```
 
 ## Author
-
-Jonathan Manzi Mihigo
+Sonia Umutesi
 npm run dev
